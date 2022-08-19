@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import { setModalWindow } from '../../store/lkSlice';
 
 import Delete from './Delete';
+import ContactInfo from './ContactInfo';
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -43,9 +44,9 @@ const ModalWindow = () => {
         {modalWindow.type === 'delete' ? (
           <Delete />
         ) : modalWindow.type === 'create' ? (
-          <div>create</div>
+          <ContactInfo type="create" />
         ) : modalWindow.type === 'edit' ? (
-          <div>edit</div>
+          <ContactInfo type="edit" />
         ) : (
           <></>
         )}

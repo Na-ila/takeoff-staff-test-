@@ -47,8 +47,23 @@ const ContactListTable = ({ contactListData }: IContactListTable) => {
   const dispatch = useAppDispatch();
   const { filter } = useAppSelector((state) => state.lkSlice);
 
-  const addContact = () => {};
-  const editContact = (id: string) => {};
+  const createContact = () => {
+    dispatch(
+      setModalWindow({
+        open: true,
+        type: 'create',
+      })
+    );
+  };
+  const editContact = (id: string) => {
+    dispatch(
+      setModalWindow({
+        open: true,
+        type: 'edit',
+        id: id,
+      })
+    );
+  };
   const deleteContact = (id: string) => {
     dispatch(
       setModalWindow({
@@ -75,7 +90,7 @@ const ContactListTable = ({ contactListData }: IContactListTable) => {
                 </TableCell>
               ))}
               <TableCell align="right" style={{ minWidth: 170 }}>
-                <IconButton color="primary" onClick={addContact}>
+                <IconButton color="primary" onClick={createContact}>
                   <Tooltip title="Добавить">
                     <AddBoxIcon fontSize="large" />
                   </Tooltip>

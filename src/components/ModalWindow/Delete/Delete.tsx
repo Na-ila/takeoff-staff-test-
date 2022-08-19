@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { setModalWindow, setContactListData } from '../../store/lkSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { setModalWindow, setContactListData } from '../../../store/lkSlice';
 
 import Button from '@mui/material/Button';
 
