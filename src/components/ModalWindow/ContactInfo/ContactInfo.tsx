@@ -18,7 +18,10 @@ const ContactInfo = ({ type }: IContactInfo) => {
 
   const [name, setName] = React.useState<string>('');
   const [surname, setSurname] = React.useState<string>('');
-  const [age, setAge] = React.useState<number>(0);
+  const [age, setAge] = React.useState<number>(1);
+  const [nameError, setNameError] = React.useState<boolean>(false);
+  const [surnameError, setSurnameError] = React.useState<boolean>(false);
+  const [ageError, setAgeError] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (type === 'edit') {
@@ -32,7 +35,37 @@ const ContactInfo = ({ type }: IContactInfo) => {
     }
   }, [contactListData.data, modalWindow.id, type]);
 
-  const createContact = () => {};
+  const createContact = () => {
+    if (!name) {
+      setNameError(true);
+    } else if (!surname) {
+      setSurnameError(true);
+    } else if (!age) {
+      setAgeError(true);
+    } else {
+      const contact = {
+        id: modalWindow.id,
+        name,
+        surname,
+        age,
+      };
+
+      dispatch(
+        setContactListData({
+          ...contactListData,
+          data: [contact, ...contactListData.data],
+        })
+      );
+
+      dispatch(
+        setModalWindow({
+          open: false,
+          type: '',
+          id: '',
+        })
+      );
+    }
+  };
 
   const editContact = () => {
     const contact = {
@@ -73,8 +106,12 @@ const ContactInfo = ({ type }: IContactInfo) => {
         variant="outlined"
         size="small"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setNameError(false);
+          setName(e.target.value);
+        }}
         className="textField"
+        error={nameError}
       />
       <TextField
         id="outlined-basic"
@@ -82,8 +119,12 @@ const ContactInfo = ({ type }: IContactInfo) => {
         variant="outlined"
         size="small"
         value={surname}
-        onChange={(e) => setSurname(e.target.value)}
+        onChange={(e) => {
+          setSurnameError(false);
+          setSurname(e.target.value);
+        }}
         className="textField"
+        error={surnameError}
       />
       <TextField
         id="outlined-basic"
@@ -92,8 +133,13 @@ const ContactInfo = ({ type }: IContactInfo) => {
         size="small"
         value={age}
         type="number"
-        onChange={(e) => setAge(+e.target.value)}
+        onChange={(e) => {
+          setAgeError(false);
+          setAge(+e.target.value);
+        }}
         className="textField"
+        error={ageError}
+        InputProps={{ inputProps: { min: 1, max: 100 } }}
       />
       <Button
         variant="contained"
