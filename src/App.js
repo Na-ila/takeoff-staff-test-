@@ -1,3 +1,4 @@
+import React from 'react';
 import './app.scss';
 import Cookies from 'universal-cookie';
 
@@ -6,7 +7,7 @@ import { setAuthorized } from './store/lkSlice';
 
 import Login from './components/Login';
 import ContactList from './components/ContactList';
-import React from 'react';
+import ModalWindow from './components/ModalWindow';
 
 const cookies = new Cookies();
 
@@ -29,7 +30,10 @@ function App() {
       ) : !authorized ? (
         <Login />
       ) : (
-        <ContactList />
+        <>
+          <ContactList />
+          <ModalWindow />
+        </>
       )}
     </div>
   );

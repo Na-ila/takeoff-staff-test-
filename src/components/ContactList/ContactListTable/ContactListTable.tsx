@@ -1,4 +1,5 @@
-import { useAppSelector } from '../../../hooks/hooks';
+import { useAppSelector, useAppDispatch } from '../../../hooks/hooks';
+import { setModalWindow } from '../../../store/lkSlice';
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -43,11 +44,20 @@ interface IContactListTable {
 }
 
 const ContactListTable = ({ contactListData }: IContactListTable) => {
+  const dispatch = useAppDispatch();
   const { filter } = useAppSelector((state) => state.lkSlice);
 
   const addContact = () => {};
   const editContact = (id: string) => {};
-  const deleteContact = (id: string) => {};
+  const deleteContact = (id: string) => {
+    dispatch(
+      setModalWindow({
+        open: true,
+        type: 'delete',
+        id: id,
+      })
+    );
+  };
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>

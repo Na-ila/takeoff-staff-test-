@@ -20,8 +20,13 @@ interface IState {
     }[];
   };
   filter: {
-    field: string;
+    field: 'name' | 'surname' | 'age' | '';
     text: string;
+  };
+  modalWindow: {
+    open: boolean;
+    type: 'create' | 'delete' | 'edit' | '';
+    id: string;
   };
 }
 
@@ -44,6 +49,11 @@ const initialState: IState = {
   filter: {
     field: '',
     text: '',
+  },
+  modalWindow: {
+    open: false,
+    type: '',
+    id: '',
   },
 };
 
@@ -119,6 +129,12 @@ const lkSlice = createSlice({
     setFilters(state, { payload }) {
       state.filter = payload;
     },
+    setModalWindow(state, { payload }) {
+      state.modalWindow = payload;
+    },
+    setContactListData(state, { payload }) {
+      state.contactListData = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchLogin.pending, (state, { payload }) => {
@@ -160,6 +176,12 @@ const lkSlice = createSlice({
   },
 });
 
-export const { setAuthorized, setLoginData, setFilters } = lkSlice.actions;
+export const {
+  setAuthorized,
+  setLoginData,
+  setFilters,
+  setModalWindow,
+  setContactListData,
+} = lkSlice.actions;
 
 export default lkSlice.reducer;
