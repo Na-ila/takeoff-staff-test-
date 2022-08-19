@@ -7,7 +7,7 @@ interface IState {
     loading: boolean;
     error: boolean;
   };
-  authorized: boolean;
+  authorized: boolean | string;
 }
 
 interface ILogin {
@@ -20,7 +20,7 @@ const initialState: IState = {
     loading: false,
     error: false,
   },
-  authorized: false,
+  authorized: 'pending',
 };
 
 export const fetchLogin = createAsyncThunk(
@@ -59,7 +59,14 @@ export const fetchLogin = createAsyncThunk(
 const lkSlice = createSlice({
   name: 'lk',
   initialState,
-  reducers: {},
+  reducers: {
+    setLoginData(state, { payload }) {
+      state.loginData = payload;
+    },
+    setAuthorized(state, { payload }) {
+      state.authorized = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchLogin.pending, (state, { payload }) => {
       state.loginData = {
@@ -84,6 +91,6 @@ const lkSlice = createSlice({
   },
 });
 
-export const {} = lkSlice.actions;
+export const { setAuthorized, setLoginData } = lkSlice.actions;
 
 export default lkSlice.reducer;

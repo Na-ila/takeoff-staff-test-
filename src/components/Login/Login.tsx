@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { fetchLogin } from '../../store/lkSlice';
+import { fetchLogin, setLoginData } from '../../store/lkSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
+import AlertMessage from '../AlertMessage';
+
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -28,37 +29,56 @@ const Login = () => {
   };
 
   return (
-    <Paper className="loginContainer">
-      <TextField
-        id="outlined-basic"
-        label="Логин"
-        variant="outlined"
-        value={login}
-        onChange={(e) => {
-          setLoginError(false);
-          setLogin(e.target.value);
-        }}
-        error={loginError}
-      />
-      <TextField
-        id="outlined-basic"
-        label="Пароль"
-        variant="outlined"
-        value={password}
-        onChange={(e) => {
-          setPasswordError(false);
-          setPassword(e.target.value);
-        }}
-        error={passwordError}
-      />
-      {loginData.loading ? (
-        <LoadingButton />
-      ) : (
-        <Button variant="contained" onClick={makeLogin}>
+    <div className="loginContainer">
+      <Paper className="paper">
+        <TextField
+          id="outlined-basic"
+          label="Логин"
+          variant="outlined"
+          value={login}
+          onChange={(e) => {
+            dispatch(
+              setLoginData({
+                error: false,
+                loading: false,
+              })
+            );
+            setLoginError(false);
+            setLogin(e.target.value);
+          }}
+          error={loginError}
+          disabled={loginData.loading}
+        />
+        <TextField
+          id="outlined-basic"
+          label="Пароль"
+          variant="outlined"
+          value={password}
+          onChange={(e) => {
+            dispatch(
+              setLoginData({
+                error: false,
+                loading: false,
+              })
+            );
+            setPasswordError(false);
+            setPassword(e.target.value);
+          }}
+          error={passwordError}
+          disabled={loginData.loading}
+        />
+        <LoadingButton
+          variant="contained"
+          onClick={makeLogin}
+          loading={loginData.loading}
+        >
           Войти
-        </Button>
+        </LoadingButton>
+      </Paper>
+      {loginData.error && (
+        <AlertMessage text="Неправильный логин или пароль" severity="error" />
       )}
-    </Paper>
+    </div>
   );
 };
 

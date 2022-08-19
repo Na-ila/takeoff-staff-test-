@@ -1,13 +1,19 @@
 .loginContainer {
-  width: 300px;
-  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 300px;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   margin: auto;
   margin-top: 35vh;
+
+  .paper {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
