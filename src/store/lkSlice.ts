@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { API_LOGIN } from '../App/config';
+import { API_LOGIN, API_CONTACT_LIST } from '../App/config';
 
 interface IState {
   loginData: {
@@ -8,6 +8,16 @@ interface IState {
     error: boolean;
   };
   authorized: boolean | string;
+  contactListData: {
+    loading: boolean;
+    error: boolean;
+    data: {
+      id: string;
+      name: string;
+      surname: string;
+      age: number;
+    }[];
+  };
 }
 
 interface ILogin {
@@ -21,6 +31,11 @@ const initialState: IState = {
     error: false,
   },
   authorized: 'pending',
+  contactListData: {
+    loading: false,
+    error: false,
+    data: [],
+  },
 };
 
 export const fetchLogin = createAsyncThunk(
@@ -51,6 +66,33 @@ export const fetchLogin = createAsyncThunk(
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error);
+      }
+    }
+  }
+);
+
+export const fetchContactList = createAsyncThunk(
+  'camera/fetchCameraList',
+  async function ({}, { rejectWithValue }) {
+    try {
+      const response = await fetch(API_CONTACT_LIST, {
+        headers: {
+          accept: 'application/json',
+          charset: 'utf-8',
+        },
+      });
+
+      console.log('response', response);
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
       }
     }
   }
@@ -87,6 +129,54 @@ const lkSlice = createSlice({
         error: true,
         loading: false,
       };
+      document.cookie = `token=payload.token`;
+      state.authorized = true;
+    });
+    builder.addCase(fetchContactList.pending, (state, { payload }) => {
+      state.loginData.error = false;
+      state.contactListData.loading = true;
+    });
+    builder.addCase(fetchContactList.fulfilled, (state, { payload }) => {
+      state.loginData.error = false;
+      state.contactListData.loading = false;
+      state.contactListData.data = [
+        { id: '1', name: 'India', surname: 'IN', age: 13 },
+        { id: '2', name: 'China', surname: 'CN', age: 14 },
+        { id: '3', name: 'Italy', surname: 'IT', age: 60 },
+        { id: '4', name: 'United States', surname: 'US', age: 32 },
+        { id: '5', name: 'Canada', surname: 'CA', age: 37 },
+        { id: '6', name: 'Australia', surname: 'AU', age: 25 },
+        { id: '7', name: 'Germany', surname: 'DE', age: 83 },
+        { id: '8', name: 'Ireland', surname: 'IE', age: 48 },
+        { id: '9', name: 'Mexico', surname: 'MX', age: 12 },
+        { id: '10', name: 'Japan', surname: 'JP', age: 12 },
+        { id: '11', name: 'France', surname: 'FR', age: 67 },
+        { id: '12', name: 'United Kingdom', surname: 'GB', age: 67 },
+        { id: '13', name: 'Russia', surname: 'RU', age: 14 },
+        { id: '14', name: 'Nigeria', surname: 'NG', age: 20 },
+        { id: '15', name: 'Brazil', surname: 'BR', age: 21 },
+      ];
+    });
+    builder.addCase(fetchContactList.rejected, (state, { payload }) => {
+      state.contactListData.loading = false;
+      state.contactListData.error = true;
+      state.contactListData.data = [
+        { id: '1', name: 'India', surname: 'IN', age: 13 },
+        { id: '2', name: 'China', surname: 'CN', age: 14 },
+        { id: '3', name: 'Italy', surname: 'IT', age: 60 },
+        { id: '4', name: 'United States', surname: 'US', age: 32 },
+        { id: '5', name: 'Canada', surname: 'CA', age: 37 },
+        { id: '6', name: 'Australia', surname: 'AU', age: 25 },
+        { id: '7', name: 'Germany', surname: 'DE', age: 83 },
+        { id: '8', name: 'Ireland', surname: 'IE', age: 48 },
+        { id: '9', name: 'Mexico', surname: 'MX', age: 12 },
+        { id: '10', name: 'Japan', surname: 'JP', age: 12 },
+        { id: '11', name: 'France', surname: 'FR', age: 67 },
+        { id: '12', name: 'United Kingdom', surname: 'GB', age: 67 },
+        { id: '13', name: 'Russia', surname: 'RU', age: 14 },
+        { id: '14', name: 'Nigeria', surname: 'NG', age: 20 },
+        { id: '15', name: 'Brazil', surname: 'BR', age: 21 },
+      ];
     });
   },
 });

@@ -5,6 +5,7 @@ import { useAppSelector, useAppDispatch } from './hooks/hooks';
 import { setAuthorized } from './store/lkSlice';
 
 import Login from './components/Login';
+import ContactList from './components/ContactList';
 import React from 'react';
 
 const cookies = new Cookies();
@@ -28,7 +29,7 @@ function App() {
       ) : !authorized ? (
         <Login />
       ) : (
-        <div>client page</div>
+        <ContactList />
       )}
     </div>
   );
