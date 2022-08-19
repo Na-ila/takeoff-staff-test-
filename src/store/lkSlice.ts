@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+import contactList from '../contactList.json';
 import { API_LOGIN, API_CONTACT_LIST } from '../App/config';
 
 interface IState {
@@ -18,6 +19,10 @@ interface IState {
       age: number;
     }[];
   };
+  filter: {
+    field: string;
+    text: string;
+  };
 }
 
 interface ILogin {
@@ -35,6 +40,10 @@ const initialState: IState = {
     loading: false,
     error: false,
     data: [],
+  },
+  filter: {
+    field: '',
+    text: '',
   },
 };
 
@@ -82,7 +91,6 @@ export const fetchContactList = createAsyncThunk(
         },
       });
 
-      console.log('response', response);
       if (!response.ok) {
         throw new Error();
       }
@@ -107,6 +115,9 @@ const lkSlice = createSlice({
     },
     setAuthorized(state, { payload }) {
       state.authorized = payload;
+    },
+    setFilters(state, { payload }) {
+      state.filter = payload;
     },
   },
   extraReducers: (builder) => {
@@ -139,48 +150,16 @@ const lkSlice = createSlice({
     builder.addCase(fetchContactList.fulfilled, (state, { payload }) => {
       state.loginData.error = false;
       state.contactListData.loading = false;
-      state.contactListData.data = [
-        { id: '1', name: 'India', surname: 'IN', age: 13 },
-        { id: '2', name: 'China', surname: 'CN', age: 14 },
-        { id: '3', name: 'Italy', surname: 'IT', age: 60 },
-        { id: '4', name: 'United States', surname: 'US', age: 32 },
-        { id: '5', name: 'Canada', surname: 'CA', age: 37 },
-        { id: '6', name: 'Australia', surname: 'AU', age: 25 },
-        { id: '7', name: 'Germany', surname: 'DE', age: 83 },
-        { id: '8', name: 'Ireland', surname: 'IE', age: 48 },
-        { id: '9', name: 'Mexico', surname: 'MX', age: 12 },
-        { id: '10', name: 'Japan', surname: 'JP', age: 12 },
-        { id: '11', name: 'France', surname: 'FR', age: 67 },
-        { id: '12', name: 'United Kingdom', surname: 'GB', age: 67 },
-        { id: '13', name: 'Russia', surname: 'RU', age: 14 },
-        { id: '14', name: 'Nigeria', surname: 'NG', age: 20 },
-        { id: '15', name: 'Brazil', surname: 'BR', age: 21 },
-      ];
+      state.contactListData.data = contactList;
     });
     builder.addCase(fetchContactList.rejected, (state, { payload }) => {
       state.contactListData.loading = false;
       state.contactListData.error = true;
-      state.contactListData.data = [
-        { id: '1', name: 'India', surname: 'IN', age: 13 },
-        { id: '2', name: 'China', surname: 'CN', age: 14 },
-        { id: '3', name: 'Italy', surname: 'IT', age: 60 },
-        { id: '4', name: 'United States', surname: 'US', age: 32 },
-        { id: '5', name: 'Canada', surname: 'CA', age: 37 },
-        { id: '6', name: 'Australia', surname: 'AU', age: 25 },
-        { id: '7', name: 'Germany', surname: 'DE', age: 83 },
-        { id: '8', name: 'Ireland', surname: 'IE', age: 48 },
-        { id: '9', name: 'Mexico', surname: 'MX', age: 12 },
-        { id: '10', name: 'Japan', surname: 'JP', age: 12 },
-        { id: '11', name: 'France', surname: 'FR', age: 67 },
-        { id: '12', name: 'United Kingdom', surname: 'GB', age: 67 },
-        { id: '13', name: 'Russia', surname: 'RU', age: 14 },
-        { id: '14', name: 'Nigeria', surname: 'NG', age: 20 },
-        { id: '15', name: 'Brazil', surname: 'BR', age: 21 },
-      ];
+      state.contactListData.data = contactList;
     });
   },
 });
 
-export const { setAuthorized, setLoginData } = lkSlice.actions;
+export const { setAuthorized, setLoginData, setFilters } = lkSlice.actions;
 
 export default lkSlice.reducer;

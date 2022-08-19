@@ -17,3 +17,19 @@
     gap: 10px;
   }
 }
+
+.contactListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .textField {
+    width: 100%;
+  }
+}

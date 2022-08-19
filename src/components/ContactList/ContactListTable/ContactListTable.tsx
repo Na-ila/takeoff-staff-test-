@@ -1,3 +1,5 @@
+import { useAppSelector } from '../../../hooks/hooks';
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -29,16 +31,20 @@ const columns: readonly Column[] = [
   },
 ];
 
+interface IContactListData {
+  id: string;
+  name: string;
+  surname: string;
+  age: number;
+}
+
 interface IContactListTable {
-  contactListData: {
-    id: string;
-    name: string;
-    surname: string;
-    age: number;
-  }[];
+  contactListData: IContactListData[];
 }
 
 const ContactListTable = ({ contactListData }: IContactListTable) => {
+  const { filter } = useAppSelector((state) => state.lkSlice);
+
   const addContact = () => {};
   const editContact = (id: string) => {};
   const deleteContact = (id: string) => {};
@@ -68,38 +74,48 @@ const ContactListTable = ({ contactListData }: IContactListTable) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contactListData.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell align="right" className="actions">
-                    <IconButton
-                      color="success"
-                      onClick={() => editContact(row.id)}
-                    >
-                      <Tooltip title="Изменить">
-                        <EditIcon fontSize="medium" />
-                      </Tooltip>
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => deleteContact(row.id)}
-                    >
-                      <Tooltip title="Удалить">
-                        <DeleteIcon fontSize="medium" />
-                      </Tooltip>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {contactListData
+              .filter((item: { [key: string]: any }) => {
+                if (filter.text && filter.field) {
+                  return item[filter.field]
+                    .toString()
+                    .toLowerCase()
+                    .includes(filter.text.toString().toLowerCase());
+                }
+                return item;
+              })
+              .map((row) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
+                        </TableCell>
+                      );
+                    })}
+                    <TableCell align="right" className="actions">
+                      <IconButton
+                        color="success"
+                        onClick={() => editContact(row.id)}
+                      >
+                        <Tooltip title="Изменить">
+                          <EditIcon fontSize="medium" />
+                        </Tooltip>
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => deleteContact(row.id)}
+                      >
+                        <Tooltip title="Удалить">
+                          <DeleteIcon fontSize="medium" />
+                        </Tooltip>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>

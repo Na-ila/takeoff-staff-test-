@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchContactList } from '../../store/lkSlice';
 
 import ContactListTable from './ContactListTable';
+import Filter from './Filter';
 
 const ContactList = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +15,8 @@ const ContactList = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="contactListContainer">
+      <Filter />
       <ContactListTable contactListData={contactListData.data} />
     </div>
   );
